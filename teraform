@@ -1,0 +1,16 @@
+kubernetes dash board - "https://opensource.com/article/21/8/terraform-deploy-helm"
+
+git command:
+git clone ( https er link dise)
+ new windows open korse
+  checkout click kore git jei branch chilo oita add korse
+  then ami pura repositiory peyegesi
+ 
+ 
+ terraform installation  "https://www.cherryservers.com/blog/install-terraform-ubuntu"
+ 
+ 
+terraform a jokhon gitlab-runner insatll korar shomoy url mention kora chilo 2 jaygay ekta holo config.toml (jei ta runner okhane likha ase) arekta holo nicher dike( jeikhane values parameters add kora hoyese) . So runner oikhane url na dileo hobe kintu values oi jaygay url dite hobe  na hole gitlab runner generate hobe na.
+
+Pipeline er Jonno:
+  first terraform folder directory create korte hobe or moddhe  terraform file rakhte hobe .then ci directory create korte hobe and oikhane yml generate korte hobe and yml file shob command diye "cd terraform" save kore then push korte hobe
