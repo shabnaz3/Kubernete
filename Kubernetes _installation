@@ -1,0 +1,760 @@
+."https://www.linuxbuzz.com/install-k3s-kubernetes-cluster-on-ubuntu/
+" and "https://docs.k3s.io/quick-start" ,"https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/README.md"and Stephan command,"https://kubernetes.io/docs/tutorials/kubernetes-basics/deploy-app/deploy-intro/"
+.sudo apt install -y curl wget
+.curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server" sh -s - --flannel-backend none --token 251023
+.curl -sfL https://get.k3s.io | sh 
+sudo su -
+sudo systemctl status k3s
+.journalctl -u k3s.service
+.
+.sudo k3s server
+.k3s server
+.systemctl status salt-minion  (port number check korar jonno)
+.systemctl stop salt-minion
+.systemctl status salt-minion
+.k3s server
+.cat /etc/redhat-release (check the error and got port number not listening)
+.man lsof
+.lsof -i :6444
+.systemctl status k3s-agent
+.systemctl stop k3s-agent
+.systemctl status k3s-agent
+.k3s server
+.systemctl status k3s
+.vi /etc/systemd/system/
+.vi /etc/systemd/system/k3s.service
+.systemctl daemon-reload 
+.systemctl start k3s
+.systemctl status k3s
+.mkdir ~/.kube
+.sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config
+.sudo chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config
+.kubectl get nodes
+.kubectl cluster-info
+.kubectl cluster-info
+.kubectl get pods -A
+.kubectl create deployment  nginx-deployment --image nginx --replicas 2
+.kubectl get deployment nginx-deployment
+.kubectl get pods
+.kubectl expose deployment nginx-deployment --type NodePort --port 80
+.kubectl get svc nginx-deployment (reciving portnumber and use it next command)
+.curl http://10.43.109.147:80
+.kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+.kubectl get pods,svc -n kubernetes-dashboard
+.kubectl patch svc kubernetes-dashboard --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]' -n kubernetes-dashboard
+.kubectl get svc -n kubernetes-dashboard    (get portnumber pai)
+.vi k3s-dashboard.yaml
+.kubectl create -f k3s-dashboard.yaml
+ then editor vi will be opened and add the information and to save >click esc >write ":wq" and edit "press iii"
+ kubectl create -f k3s-dashboard.yaml
+open the browse "https:// ip address: portnumber"
+then sign it with token
+ kubectl apply -f service-account.yaml
+jodi delete korte chai kono configure file(mane .ymal) tahole just "rm file er name likhte hobe"
+ 
+--------------------------------------------------------
+dev server er login korte hoy "ssh shabnaz.khanam@ldap-dev01.in.pi-lar.net"
+______________________________________________________
+Neu terminal open korle
+.sudo su -
+.kubectl -n kube-system  create token admin-user1
+(egula likhlei login kora jabe)
+" stephan shob gular .yaml giye namespace change kore dise . amakeo ei rokom name-space  change kore onek gula user creat korte hobe mane .yaml generate korte hobe"
+eta change korar karone acess pawa gese
+_________________________________________________________
+jodi ami visual studio diye kaj korte chai tahole
+first terminal a path check korte hobe ami kon directory te asi "pwd" likhte hobe
+tarpor "cd.." likhe eikhan thake ber hoite hobe
+tarpor abr pwd likhe check korte hobe
+jodi "/home/remotes/shabnazkhanam" eta ase tahole eta "kubectl apply -f k3s/dashboard.yaml"  
+tarpor "kubectl -n kube-system  create token admin-user1"
+_______________________________________________________________________
+"https://medium.com/rahasak/kubernetes-role-base-access-control-with-service-account-e4c65e3f25cc"
+1st create service  account
+ check the service-account with this command in the terminal "kubectl describe serviceaccount captain -n kube-system"
+_____________________________________
+After deleting
+
+systemctl status k3s
+sudo ls /var/lib/rancher/k3s/server [To avoide :FATA[0000] starting kubernetes: preparing server: failed to normalize server token; must be in format K10<CA-HASH>::<USERNAME>:<PASSWORD> or <PASSWORD> ] 
+ps -ax
+lsof -i :6444
+ps -ax | grep k3s
+systemctl stop k3s-agent
+systemctl status k3s
+systemctl start k3s 
+sudo /usr/local/bin/k3s server --docker[To avoid   Process: 16289 ExecStart=/usr/local/bin/k3s server --docker (code=exited, status=1/FAILURE)]
+systemctl start k3s
+systemctl status k3s   
+kubectl get pods (if pods are terminating)
+systemctl start k3s 
+kubectl get pods
+________________________________________________________________________________
+ To uninstall k3s
+ 
+ /usr/local/bin/k3s-uninstall.sh
+
+/usr/local/bin/k3s-agent-uninstall.sh
+
+-----------------------------------------------------------------------------------
+Formal Instalation
+
+sudo apt update
+sudo apt upgrade -y
+sudo reboot
+sudo apt install -y curl wget
+curl -sfL https://get.k3s.io | sh – (it works without "-") 
+sudo systemctl status k3s (It is showing "active running","sucessful")
+mkdir ~/.kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config && sudo chown $USER ~/.kube/config
+sudo chmod 600 ~/.kube/config && export KUBECONFIG=~/.kube/config
+kubectl get nodes
+kubectl cluster-info
+kubectl cluster-info
+kubectl create deployment  nginx-deployment --image nginx --replicas 2
+kubectl get deployment nginx-deployment
+kubectl get pods (showing shob kisu running)
+kubectl expose deployment nginx-deployment --type NodePort --port 80
+kubectl get svc nginx-deployment 
+curl <Your-Ubuntu-System-IP-Address>:oi ta
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl get pods,svc -n kubernetes-dashboard (eikhaner ta)
+kubectl patch svc kubernetes-dashboard --type='json' -p '[{"op":"replace","path":"/spec/type","value":"NodePort"}]' -n kubernetes-dashboard
+kubectl get svc -n kubernetes-dashboard (eikhane ekta port number pabo)
+kubectl create -f k3s-dashboard.yaml
+kubectl -n kube-system  create token admin-user
+http://192.168.30.81:30180/#/login
+-------------------------------------------
+"Unkown error" er jonno
+curl -s -o /dev/null -w "%{http_code}" 192.168.30.81
+kubectl describe secret $(kubectl get secret | grep cluster-admin | awk '{print $1}')
+kubectl create token default    
+curl https://k8scp:6443/apis --header "Authorization: Bearer $token" -k
+kubectl get clusterrole -A 
+
+---------------------------------------------------------------------------
+To kube-config file
+"https://docs.d2iq.com/dkp/2.4/create-a-kubeconfig-file-for-your-cluster , https://devopscube.com/kubernetes-kubeconfig-file/"
+https://medium.com/@ruben.laguna/installing-a-gitlab-runner-on-kubernetes-ac386c924bc8
+____________________________________________________________________________________________________________________
+how to create config file
+"" #(gitlab runner)
+
+create namespace (gitlab-runner-namespace.yaml)
+kubectl create -f gitlab-runner-terminal-namespace.json ( write in terminal )
+kubectl get namespace
+Create a role gitlab-runner-gitlab-runner-role.yaml  (according to the website)
+then run kubectl create -f gitlab-runner-gitlab-runner-role.yaml (write in the terminal)
+kubectl get --namespace=gitlab-runner role (write in terminal)
+kubectl describe role --namespace gitlab-runner gitlab-runner
+kubectl create rolebinding --namespace=gitlab-runner gitlab-runner-binding --role=gitlab-runner --serviceaccount=gitlab-runner:default (write in terminal)
+kubectl get --namespace gitlab-runner rolebinding
+create values.yaml file similar to website instruction but add "certsSecretName: gitlab-domain-cert" in values.yaml [Note:secret name ta eimon i rakhte hobe nahole run korbe na]
+
+"https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab"
+
+kubectl create secret generic <SECRET_NAME> \ (values.yaml a jei certsSecretName: gitlab-domain-cert eikhane "gitlab-domain-cert" hobe )
+  --namespace <NAMESPACE> \  ( <Namespace> ei khane   gitlab-runner hobe)
+  --from-file=<TARGET_FILENAME>=<CERTIFICATE_FILENAME> (eikhane https://git.in.pi-lar.net/ website giye certificate download korte hobe tarpor ubuntu root terminal giye likhte hobe " rysnc file path(oi file giye right button click korle properties er ta copy kore eikhane likhte hobe)) 192.168.30.81 tarpor destination er path)[certificate file er name hobe "git.in.pi-lar.net.crt" dite hobe ]
+
+[ 2nd ber installation er shomoy kissu ta change korte hoise jemon values_gitlab.yaml use korechi gitlab-runner instation er shomoy r certsSecretName: gitlab-pilar-cert nam change korte hoise and 
+command er khettre " kubectl create secret generic gitlab-domain-cert --namespace gitlab-runner --from-file=git.in.pi-lar.net.crt=/home/remotes/shabnazkhanam/ca.pi-lar.net.cert " eta dite hoise]
+
+
+helm repo add gitlab https://charts.gitlab.io (In terminal)
+helm upgrade --namespace gitlab-runner  gitlab-runner -f values.yaml gitlab/gitlab-runner
+kubectl get --namespace gitlab-runner pod (Check korte hobe ready 1/1 kina na hole abr korte hobe )
+tarpor https://git.in.pi-lar.net/ whistle.law>setting>ci>runner> check your container> click on it> click operate> click on cluster check eta visiable kina na? etai next kaj
+[important command : kubectl logs (pods name) -n (namespace name ) ]
+
+
+[jodi log file na kaj kore tahole kubectl logs --namespace gitlab-runner  poder er name
+terminal a sudo gitlab-runner  ]
+
+
+helm delete --namespace gitlab-runner (uninstall korar jonno)
+
+[helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add codecentric https://codecentric.github.io/helm-charts ei rpository gula lagbe]
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ how to install git lab agent
+ 
+ 
+ "https://docs.gitlab.com/ee/user/clusters/agent/install/"
+ 
+  helm upgrade --install t2 gitlab/gitlab-agent \ (ei khane t2 holo gitlab-agent er name ar namespace holo gitlab-agent-t2)
+    --namespace gitlab-agent-t2 \
+    --create-namespace \
+    --set image.tag=v16.3.0 \
+    --set config.token=seRzBe-WWNFi7rUt-YCzVofxDa1rfPJvegFoq8-eyvoyftmbzQ \
+    --set config.kasAddress=wss://git.in.pi-lar.net/-/kubernetes-agent/  --set-file config.caCert=git.in.pi-lar.net.pem
+[Note: eikhane helm theke shuru kore git.in.pi-lar.net.pem porjonto purata ekbare copy kore nite hobe r last part "--set-file config.caCert=git.in.pi-lar.net.pem" eta shudhu website theke niya hoyse and baki part gula operator>kube cluster> connect cluster click kore option theke select korle jei page ashe tate pura command diya thake ]
+ 
+ _________________________________________________________________________________________________________________________________________________________________________________________________
+
+how to create a cluster
+
+sudo apt-get update && sudo apt-get install -y kubelet kubeadm kubectl (kubeadm install korar jonno)
+sudo kubeadm init --pod-network-cidr= 192.168.0.0/16
+mkdir -p .kube
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config 
+sudo chown $10020:$20001  .kube/config (1st $ oikhene id -u and 2nd $ oikhane id -g likhle jei value ase tai boishaye dite hobe)
+
+ekhon kubernetes er token ber korte hobe
+cd /etc/ (directory te dhuka)
+ls (shob file er list dekha)
+cd .. (folder theke ber hoye asha)
+cd /etc/
+ls
+cd rancher 
+ls
+cd k3s 
+ls
+sudo less k3s.yaml
+cd ..   
+cd node
+ls
+sudo less password
+
+ _________________________________________________
+ 
+ Task : Internal dns service with cloud in Kubernetes
+ 
+"https://kubernetes.io/docs/tasks/administer-cluster/_print/#pg-3d0cd7d2f13d4759094f281504cf57b8"
+
+ 
+how to  create config-map following next web-site
+https://earthly.dev/blog/kubernetes-config-maps/
+
+___________________________________________________________________________________
+
+configuration of coredns of configmap with different override and server extension
+https://docs.digitalocean.com/products/kubernetes/how-to/customize-coredns/
+https://learn.microsoft.com/en-us/azure/aks/coredns-custom 
+
+(cordns-custom.yaml)
+ 
+______________________________________________________________________________________________
+ 
+https://www.alibabacloud.com/help/en/ack/ack-managed-and-ack-dedicated/user-guide/configure-coredns  
+ 
+
+
+https://kubernetes.io/docs/tasks/administer-cluster/_print/#pg-3d0cd7d2f13d4759094f281504cf57b8
+
+https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
+
+https://docs.digitalocean.com/products/kubernetes/how-to/customize-coredns/
+
+
+https://www.nslookup.io/domains/in.pi-lar.net/webservers/
+
+
+
+# internat dns  configuration er jonno  reinstall k3s korte hobe.
+
+_____(ei gula holo referrnce)__________
+
+1st k3s 
+uninstall kore abr install korba  and formal installation step follow kortehobe kintu oi khane "curl -sfL https://get.k3s.io | sh –" diyar 
+shomoy "curl -sfL https://get.k3s.io | sh  -s - --cluster-domain value	"cluster.local" " ba "curl -sfL https://get.k3s.io | sh -s - --cluster-domain "cluster.local" " eta dite hobe
+baki shob same (ref holo "https://docs.k3s.io/installation/configuration, https://docs.k3s.io/cli/server")
+
+2nd config.yaml file create korte hobe using Stub domains ("https://learn.microsoft.com/en-us/azure/aks/coredns-custom") ebong cordns-custom.yaml file creat korte hobe "https://docs.digitalocean.com/products/kubernetes/how-to/customize-coredns/"
+
+3nd new pod create korte hobe  ei website follow kore  "https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/" all command run korte hobe to check customize dns add hoche kina
+
+kubectl exec -ti dnsutils -- cat /etc/resolv.conf
+kubectl exec -i -t dnsutils -- nslookup kubernetes-dashboard.kubernetes-dashboard.svc.pi-lar.cloud.
+kubectl get pods --namespace=kube-system -l k8s-app=kube-dns 
+kubectl edit configmap coredns -n kube-system   
+---------------------------------------------------------------------------
+
+next task service of deployment the container of pod jeta pabo "kubectl get pod -o wide" theke
+
+"https://kubernetes.io/docs/tutorials/services/connect-applications-service/"(Approve by stephan)
+"https://platform9.com/learn/v1.0/tutorials/nginix-controller-via-yaml"
+
+________________________________________________________________
+how to install kube-proxy
+sudo apt install snapd
+sudo snap install kube-proxy --classic
+To check: 
+ps -aux | grep kube-proxy
+_____________________________________________________
+
+Installation Mariadb (eta similar to gitlab runner)
+"https://www.datree.io/helm-chart/mariadb-galera-bitnami"
+
+
+[kubectl get sts -w --namespace new-ns -l app.kubernetes.io/instance=galera
+ echo "$(kubectl get secret --namespace new-ns galera-mariadb-galera -o jsonpath="{.data.mariadb-root-password}" | base64 -d)"
+ 
+ kubectl run galera-mariadb-galera-client --rm --tty -i --restart='Never' --namespace new-ns --image docker.io/bitnami/mariadb-galera:11.2.2-debian-11-r1 --command \
+      -- mysql -h galera-mariadb-galera -P 3306 -uroot -p$(kubectl get secret --namespace new-ns galera-mariadb-galera -o jsonpath="{.data.mariadb-root-password}" | base64 -d) my_database
+ 
+ kubectl port-forward --namespace new-ns svc/galera-mariadb-galera 3306:3306 &
+    mysql -h 127.0.0.1 -P 3306 -uroot -p$(kubectl get secret --namespace new-ns galera-mariadb-galera -o jsonpath="{.data.mariadb-root-password}" | base64 -d) my_database
+ 
+ helm upgrade --namespace new-ns galera oci://registry-1.docker.io/bitnamicharts/mariadb-galera \
+      --set rootUser.password=$(kubectl get secret --namespace new-ns galera-mariadb-galera -o jsonpath="{.data.mariadb-root-password}" | base64 -d) \
+      --set db.name=my_database \
+      --set galera.mariabackup.password=$(kubectl get secret --namespace new-ns galera-mariadb-galera -o jsonpath="{.data.mariadb-galera-mariabackup-password}" | base64 -d)]
+
+
+"https://github.com/bitnami/charts/issues/8277" (I use this part)
+"https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml"
+___________________________________________________________
+
+keycloak instalation
+"https://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/" # stephan suggested 
+https://github.com/codecentric/helm-charts/tree/master/charts/keycloak
+
+helm install keycloak codecentric/keycloak
+kubectl get all
+kubectl get pods -A
+kubectl describe pod kkeycloak-0 -n default
+kubectl get events -A | grep -i unhealthy | grep "connection refused"        # etar jonno https://support.hpe.com/hpesc/public/docDisplay?docId=a00117940en_us&docLocale=en_US&page=Troubleshoot_Liveliness_Readiness_Probe_Failures.html
+
+kubectl get pod/keycloak-0 -n default
+kubectl get pods 
+
+Video("https://www.google.com/search?sca_esv=592129336&sxsrf=AM9HkKk4Shu7a5LeBdFqjP_8PlwRcsBoQg:1702976537036&q=how+to+login+keycloak+with+values.yaml+in+kubernetes&tbm=vid&source=lnms&sa=X&ved=2ahUKEwi727P8kZuDAxVE2AIHHf2fAlIQ0pQJegQIDBAB&biw=1850&bih=939&dpr=1#fpstate=ive&vld=cid:40262f3a,vid:1feLDnEmsdE,st:0") 
+
+er onushare  kubectl edit svc keycloak-http (# oi khane Nodeport likhte hobe clusterIP er jaygay (kora lagbe na))
+
+According to stephan refference  weblink -> Creating loadbalencer_keycloak yaml file (eikhane amader port number mension korete hobe upore keycloak-http file("kubectl edit svc keycloak-http" likhar pore jei file ashe) oita follow kore dite hobe)
+
+
+kubectl get svc (external ip address check korte hobe jodi na pawa jay tahole dashboard of k3s er ta check kortehobe. oikhane service give check korte hobe jodi kono port number er problem bole tahole port number change korte hobe for example: 80 te problem hole yaml eshe 81 kore dite hobe)
+
+loadbalencer_keycloak yaml file a selector a "app.kubernetes.io/name: keycloak" pura ta likhte hobe tahole external ip address chole ashbe and dashboard giye service the oi container(metadata te jei  nam thake oi name click korle oitar external a :81 port er ip address click korele keycloak pawa jabe) 
+
+In values2.yaml file a download korte hobe  "Https:git---" theke oikhane and vedio follow kore  username and password dite hobe and values file a  Ingress>ingressClassName: "traefik" dite hobe
+
+terminal a "helm upgrade keycloak codecentric/keycloak --values K3s/values2.yaml"  
+
+tarpore  k3s dash board giye podes er external er giye click kore keycloak url website peye jaba.
+
+[rf :https://wekeo.docs.cloudferro.com/en/latest/kubernetes/Deploy-Keycloak-on-Kubernetes-with-a-sample-app-on-WEkEO-Elasticity.html
+https://github.com/codecentric/helm-charts/tree/master/charts/keycloak
+https://geek-cookbook.funkypenguin.co.nz/recipes/kubernetes/keycloak/
+https://www.google.com/search?sca_esv=592129336&sxsrf=AM9HkKk4Shu7a5LeBdFqjP_8PlwRcsBoQg:1702976537036&q=how+to+login+keycloak+with+values.yaml+in+kubernetes&tbm=vid&source=lnms&sa=X&ved=2ahUKEwi727P8kZuDAxVE2AIHHf2fAlIQ0pQJegQIDBAB&biw=1850&bih=939&dpr=1#fpstate=ive&vld=cid:40262f3a,vid:1feLDnEmsdE,st:0
+https://subscription.packtpub.com/book/cloud-and-networking/9781800562493/2/ch02lvl1sec06/discovering-the-keycloak-admin-and-account-consoles
+https://wjw465150.gitbooks.io/keycloak-documentation/content/getting_started/topics/first-boot/initial-user.html
+https://www.keycloak.org/getting-started/getting-started-zip
+https://www.google.com/search?q=how+to+get+external+ip+address+of+cluster+in+keycloak+in+kubernetes&sca_esv=592150413&sxsrf=AM9HkKkLkwi7Nydg-7AbiZ45wDGOIPhsCw%3A1702982149317&source=hp&ei=BXKBZaSrDf6g5NoP7_W0kAw&iflsig=AO6bgOgAAAAAZYGAFSQkmaYIzqZ6QDJUej7uJ5IpIYvg&ved=0ahUKEwjkwcDwppuDAxV-EFkFHe86DcIQ4dUDCAw&uact=5&oq=how+to+get+external+ip+address+of+cluster+in+keycloak+in+kubernetes&gs_lp=Egdnd3Mtd2l6IkNob3cgdG8gZ2V0IGV4dGVybmFsIGlwIGFkZHJlc3Mgb2YgY2x1c3RlciBpbiBrZXljbG9hayBpbiBrdWJlcm5ldGVzMggQABiABBiiBEicowJQAFjEoQJwAHgAkAEAmAH7AaAB3UmqAQYwLjU1LjO4AQPIAQD4AQHCAgQQIxgnwgIOEC4YgAQYsQMYxwEY0QPCAgsQABiABBixAxiDAcICDhAuGIAEGIoFGLEDGIMBwgIIEC4YgAQY1ALCAgsQLhiABBjHARjRA8ICChAAGIAEGIoFGEPCAg4QLhiABBjHARivARiOBcICCBAuGIAEGLEDwgIFEC4YgATCAgoQLhiABBgUGIcCwgIFEAAYgATCAgwQIxiABBiKBRgTGCfCAgcQABiABBgTwgIJEAAYgAQYDRgTwgIIEAAYFhgeGBPCAggQABgeGA0YE8ICBRAhGKABwgIEECEYFcICBxAhGKABGArCAgUQIRifBQ&sclient=gws-wiz
+https://alesnosek.com/blog/2017/02/14/accessing-kubernetes-pods-from-outside-of-the-cluster/
+https://github.com/codecentric/helm-charts/tree/master/charts/keycloak#creating-a-keycloak-admin-user]
+
+
+
+__________________________________________________________________________________________________________________________
+
+Next task holo 
+maria db install korte hobe  whistle law helm chart er  installation process er maddhome 
+
+1. Installation MariaDB galara
+terminal a: helm repo list
+[oi khane jei URL ase bitnami r oita copy kore intenet theke bitnami repository theke maria galera er valuer.yaml file copy korete hobe areekta yaml file generate korte hobe jetar name holo maria_gelera.yaml .
+ebong db change korte hobe oitart user,name and password a keycloak dite hobe]
+
+helm install galera -n new-ns --create-namespace bitnami/mariadb-galera --values K3s/mariadb_galera.yaml
+
+[ei shomoy error dite pare jemon rootUser.password is  empty, tokhon jekono ekta name dite hobe ami "admin" disi. tasara maria db installation jei ref diya ase oita follow korte hobe ei khane. after installation er por Name,last deployed eigula ase and er pore onek gula command ashe jeigula k deploy korte bole  oi gula run korete hobe and shathe "galare-maria. .... .svc.cluster" eirokom kisu ekta thake oita maria_gelare database name ,eita use korte hobe keycloak  values.yaml er extraEnv: | > name: DB_ADDR er por value te dite hobe [oita.svc portjonto]]
+
+kubectl get all -n new-ns diye dekhte hobe shob container run kore kina [jodi na hoy tahole eta uininstall korte hobe"helm delete galera -n new-ns" diye ebond must pv,svc,pod check korte hobe using kubectl get .... . jate maria db container ase kina .and oboshoi logs check korte hobe joi na open hoy tahole  ymal file er problem.
+
+2. Keycloak Installation
+
+same vabe helm rep list theke codecentric a giye keycloak repository te values.yaml a shob copy kore eikhane r ekta yaml file generate korbo jar nam diyechi values_with_keycloak_mariadb.yaml  te paste korbo and extraEnv: | a change korbo user , values eigula te ingress er ingressClassname change kore traefik likhte hobe and DB_ADDR change korte hobe jeta mariadb te mention kora hoyche.
+
+helm upgrade keycloak -n new-ns codecentric/keycloak --values K3s/values2.yaml
+
+kubectl get pod -A check kora jonno na hole log file check korte hobe.
+
+tarpor loadbalencer.yaml generate korte hobe with same namespace er maddhome 
+
+kubectl apply -f k3s/LB2.yaml
+
+tarpor kubernetes er dashboard a jete hobe> service theke keycloak pod er external er ip address jodi na jay tahole kubectl loadbalencer er ip address dekhte hobe.
+
+________________________________________________________________________________________________________________
+
+https://docs.bitnami.com/kubernetes/infrastructure/mysql/configuration/customize-new-instance/
+
+establish connection between with maria db and keycloak(according to whistle pipline er maddhome )
+eikhane ceate database install korlam maria db te are ei database sql shob gula niye ashsi whistle repository theke dbcreate.sql pura copy kore 
+initdbScripts:
+      create.sql: |           
+      eikhane paste korte hobe
+
+mariadb upgrade korete hobe
+
+_______________________________________________________________________________________________________________
+Next task
+ mariadb k reinstall koreted hobe and scrip push korte hobe
+ 1st vs  login  git
+ tarpor url dite hobe repository 
+ tarpor script change kore dite hobe
+  deploy.test.yaml jeta back up ase.
+______________________________________________________________________________________________________________________
+how to connect git repository from my local mechine
+git branch "branch er nam taholei new branch ready hoye jabe"
+clone
+1st open the visiual studio code (vsc) open the main page "welcome" (ci/whistlelaw open korte hobe)
+choose git clone repository  then repository url dite hobe and nijer gitlab er user name and email address dite hobe shonge password 
+dorkar hole terminal "git --- username " dite hote pare
+
+push/pull
+
+1st we have to modify the somthing then click source controller [eta ekdom dan pashe thake  vsc(virtual studio code) er sign thake oitate click kore push a click korte hobe tokhon code er upore username and password chaibe oita dite hobe ]
+
+ 
+_________________________________________________________________________________________________________________________________________________________
+How to run the pipeline
+ ci/whistle low theke push korte hobe namespce-cwg....yaml k  
+
+
+___________________________________________________
+install mariadb with different different namespace
+
+1. create namespace cwg-pipeline_experiments
+> new branch khulte hobe 
+ git --help
+ git show namespace_cwg-pipline_experiments.yaml
+ git switch new
+ git add namespace_cwg-pipline_experiments.yaml 
+ git commit -m "added namespace_cwg" 
+ git ls-files      
+ git status 
+                                  
+2. Install mariadb with this namespace
+eta automatically install hoy  pipline theke
+__________________________________________________________________
+
+git stash
+git stash apply
+git checkout master
+git stash list
+cp K3s K3s_save (k3s er file gula K3s_save a save hobe)
+cp -r K3s K3s_save
+cd K3s
+git checkout master 
+git checkout new  
+git stash apply
+_________________________________________________
+git clone https://gitlab.com/pi-lar/neuropil  
+
+git branch <branch er nam>
+git checkout new branch name
+
+1st directory te jabo mane neuropil a
+cd neuropil
+git branch <branch er nam>
+git checkout new branch name
+
+git add doc/verifpal
+jei file nibo shet copy kore ei folder paste kore 
+
+git status dile chole ashbe
+git add doc/verifpal/Handshake_Message.vp
+
+git config --global user.name "shabnaz.khanam"
+git config --global user.email shabnaz.khanam@pi-lar.net
+git commit -m "Neuropil Protocol Verification by Verifpal Cryptographic tool"
+git push origin add_verifpal_documentation
+
+git status
+ [important note : git l er khetre file er name holte hobe sepecial character sara for examaple:handshake(final).vp likha jabe na likhte hobe handshake_final.vp likhte hobe na hole eta command er file name nibe na r jodi likhte hoy tahole 
+ git restore --staged doc/verifpal/dht_queries\(final\)-1.png   mane special chararcter er age "\" dite hobe]
+ [git fetch command use korle  shokol information local chole ashbe jodi new2 na pawa jay]
+
+_______________________________________________
+Task. Gitlab would like to access the resource of secret. ei jonno gitlab er shathe git runner er connnection and git runner er shathe  service account er connection and service account er secret connection esstablish korte hobe.
+
+local mechine a gitlab runner install korlam
+similar to gitlab runner installation process
+kubectl apply -f gitlab-runner.yaml
+kubectl create -f gitlab-runner-gitlab-runner-role.yaml [ei khane all resource er access pawar jonno shob resource er name dye deya hoise example: " resources: ["configmaps", "events", "pods", "pods/attach", "pods/exec", "secrets", "services"] " ]
+kubectl describe role --namespace gitlab-runner gitlab-runner
+kubectl create rolebinding --namespace=gitlab-runner gitlab-runner-binding --role=gitlab-runner --serviceaccount=gitlab-runner:default
+kubectl get --namespace gitlab-runner rolebinding
+kubectl get pods -n gitlab-runner (check kora eta running naki)
+
+er por values.yaml file modify korte hobe 
+
+gitlabUrl: https://git.in.pi-lar.net/
+runnerRegistrationToken: GR1348941XmD9CdaKV1JVyJ3sKt5s
+certsSecretName: gitlab-domain-cert
+ etar por 
+
+rbac:
+  create: true
+  rules: 
+    - resources: ["configmaps", "events", "pods", "pods/attach", "pods/exec", "secrets", "services"]
+      verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/exec"]
+      verbs: ["create", "patch", "delete"]
+    - apiGroups: [""]
+      resources: ["pods/log"]
+      verbs: ["get"]
+      
+ eigula porata add korte hobe 
+ 
+helm repo add gitlab https://charts.gitlab.io
+helm upgrade --namespace gitlab-runner  gitlab-runner -f values.yaml gitlab/gitlab-runner
+kubectl get --namespace gitlab-runner pod 
+https://git.in.pi-lar.net/ whistle.law>setting >ci >runner> check your cluster> click on it ( ebong side oikhane 3 ta  option ase oikhan the edit option click kore "tag"  name ekta option ashbe oikhane "t2, kaniko" add korte hobe ) > click operate > click on cluster 
+
+
+
+service accoount er shathe secret er connection establish korar jonno service-1.yaml file generate korlam oi khane new namespace generate korlam. 
+
+1st create new namesapce in same yaml file
+
+generate secret resource with same namespace
+
+ create cluster Role to define the able able access of secret
+ create cluster role binding with pre generated user "clauster admin" karon ei user shob resource er access ase tai eta use korse
+ ei vabe
+ 
+ roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+  
+  
+subject er oikhane service account er oi name diya hoise jeta deploy-test (wishtle repository > buil>pipline>first container er third cross sign ta click korle deploy test likhan ase oita click kore  hate dan dike reload option ase oita click korte hobe jei error ashbe oitar kotha bola hoise ) a mention kora hoise and jei namespace mention kora hoise oita dite hoise.(error a service account:namespace:name thake) 
+
+[important: deploy test korar shomoy 1st gitlab runner cluster name chole ase oi ta check korte hobe jeta mattro generate kora sheta running naki onno ta. onno ta hole oi  runner giye pause kore dite hobe]
+
+tarminal  kubectl apply -f service-1.yaml likhte hobe
+
+_________________________________________________________
+Today Task is installation mariadb_galera and keycloak  instalation  with namespace mariadb
+
+_________________________________________________________________________
+development server
+jodi kubectl install na thake ba kaj na kore 
+tahole nil er config file download kore open korte hobe tar upor option theke save as a click kore home theke ".kube" a click korte hobe
+then terminal a "export KUBECONFIG=~/.kube/config" eta run korte hobe tahole kubectl active hoye jabe
+
+------------------------------------------------------------------------------------------------------
+how to login from server
+ssh shabnaz.khanam@ldap-dev01.in.pi-lar.net
+following steps 
+dash board login korar jonno https://ldap-dev01.in.pi-lar.net:30571/#/login
+___________________________________________________________________________________
+Task : mariadb development server install korte hobe keycloak keo install korte hobe
+and helm values file oikhane add kore image generate korbo
+whistle helm chart and ci er upor depend kore  keycloak install korte hobe
+
+first a terminal a -->  git clone https://git.in.pi-lar.net/pi-lar/whistle
+then run korte hobe  helm upgrade --install cwg --namespace cwg --set name=$name --set imageTag=tag-$name -f values.yaml -f values-prod.yaml .  
+tarpor error ashse "Warning  FailedScheduling  29m (x17 over 109m)  default-scheduler  0/1 nodes are available: 1 node(s) had untolerated taint {key: allow}. preemption: 0/1 nodes are available: 1 Preemption is not helpful for scheduling.."
+eta ke fix korar jonno   kubectl scale --replicas=0  deployment/wcg -n mariadb terminal likhte hobe
+
+kubectl scale --replicas=1  deployment/wcg -n mariadb 
+ 
+kubectl describe pods  cwg-d7c9bc6c7-rdj4f (pod er nam) -n mariadb
+node edit korte hobe selector = cluster = true remove korte hobe
+
+kubectl scale --replicas=0  deployment/keycloak -n mariadb
+kubectl scale --replicas=1  deployment/wcg -n mariadb
+and whistle>k8s>helm>template>keycloak-deployment yaml file theke image oi jagay "git-in.... likhte hobe
+ 
+___________________________________________________________________
+aaj keo same kaj korsi but image name change korsi jeta mention kora hoise
+jokhoni Keycloak_deployment.yaml file  change korle replica command use korte hobe
+___________________________________________________________________________________________________________
+Today's Task
+
+first "git.in.pi-lar.net:5050" er eikhane port number add korlam and pipeline run korlam mariadb directory add korlam and mariadb.yaml add korlam and deploy_test.yaml a command change korlam.
+
+deploy test er nginx command delete koray depl0y-test active holo pipe line, gitlab personal access token generate korlam
+
+gitlab er access token er khettro 
+first ekta token generate korte hobe, then base64 encoded a giye "(token name mane)shabnaz1:token " encode korte hobe oi ta k 
+
+{
+   "auths": {
+        "https://git.in.pi-lar.net:5050": {
+            "auth": "c2hhYm5hejE6Z2xwYXQtWlA2RHR3ejF6NzJSRER6M1otTlM="
+        }
+    }
+}
+
+auth:"" eikhane diye abr encode korte hobe then accesstoken file a add korte hobe
+
+then encode value accesstoken.zaml file a add korte hobe.
+_____________________________________________________________________________
+K3s agent
+https://137.184.194.55/kubernetes/learn_by_doing/initial_setup/install_k3s_agent/
+
+ami upore link follow korsi export token = er jaygay token.txt  ja ase ta dite hobe
+
+export K3S_URL="https://export K3S_URL="https://ldap-dev01.in.pi-lar.net:6443" dite hobe
+________________________________________________________________________________________________________
+Node to Node Communication(distribution workload to nodes)
+"https://medium.com/@extio/understanding-kubernetes-node-to-node-communication-a-deep-dive-e1d6a5ff87f3"
+https://www.youtube.com/watch?v=XxFi1ZbkQpQ
+https://cloudhero.io/kubernetes-evenly-distribution-of-pods-across-cluster-nodes/
+https://spacelift.io/blog/kubectl-get-nodes
+https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes/
+
+https://yuminlee2.medium.com/kubernetes-node-selector-and-node-affinity-ecb3a4d69165 (eta important)
+
+K3s agent installation er pore k3s server (idap-dev01 server) automatically k3s agent peye jay. "kubectl get nodes" diye check korte hobe
+
+tarpor "https://cloudhero.io/kubernetes-evenly-distribution-of-pods-across-cluster-nodes/" ei link follow korsi
+
+kubectl get nodes
+kubectl label node master-node node-role.kubernetes.io/master=master
+$ cat > unkind-config.yaml <<EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: master
+    extraMounts:
+    - hostPath: hostnames/ldap-dev01 
+      containerPath: /etc/hostname
+  - role: master
+    extraMounts:
+    - hostPath: hostnames/master-node
+      containerPath: /etc/hostname
+
+kubectl get nodes
+kubectl describe nodes master-node (role check korte hobe)
+kubectl get nodes --show-labels
+kubectl label nodes master-node disktype=ssd
+kubectl get nodes --show-labels
+
+create whistle_law_deployment.yaml file
+yaml file vitore container age affinity add korte hobe ei link follow kore (https://kubernetes.io/docs/tasks/configure-pod-container/assign-pods-nodes-using-node-affinity/)
+ar tolerations "ei link follow korte hobe"[tar age kubectl edit nodes master-node lokhar pore oi node er taints information eikhane lagate hobe], lebel ta dashboard er example dekhe andaje likhte hoise
+
+kubectl get pods -n mariadb -o wide diye dekhte hobe eta run kortese kina
+
+_______________________________________________________________________________________________________________________________
+ aaj ke task holo
+ nils er branch er unoshare amr branch er file gula k modify kora.
+ ei khetre image.keycloak.yml file er niche ses dike 
+  
+  age jei command chilo sheigula k  delete korte hobe but egula important hote pare 
+  --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
+  --registry-certificate git.in.pi-lar.net:5050=/builds/pi-lar/whistle/git.in.pi-lar.net.crt
+  
+ image.tomcat.yml file same command use korte hobe 
+ 
+ --registry-certificate git.in.pi-lar.net:5050=/builds/pi-lar/whistle/git.in.pi-lar.net.crt
+
+---------
+disk er space dekhar jonno
+df -h  
+du -h -d1 /  
+
+-------
+task holo presentation dekha
+ wishtle-law pod ta edit kore dekha 
+
+___________________________________________________________________
+
+To install ingress-nginx controller which workes like a load balancer
+first ei link theke "https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/cloud/deploy.yaml" theke copy kore ingress-values.yaml creat korte hobe
+tarpor ingress ymal create korte hobe for dashboard er ingress er resource er jonno
+ei khane amr ekta error ashcilo seta holo service a my nginx... not found. eta solution holo
+kubectl get validatingwebhookconfigurations er pore jodi my nginx ashe tahole delete kore diya "kubectl delete validatingwebhookconfigurations my-nginx-ingress-ingress-nginx-admission"
+tarupor abr ingress.yaml apply korte hobe. ebong oi khane namespace default er jaygay cwg-new2 ditbo jate service jei keycloak ta ase shetar shathe jukto hote pare
+
+keycloak er pod connection refuse kortesilo shei khettro net Policies giye  netplo name jei pod thakbe sheta k delete korte hobe
+[Ei khane Stephan aro change korse jodi important na startupPro time limination change korse  timeout 5 korse and period 60 secon korse. container er arg te 
+args:
+        - /opt/keycloak/bin/kc.sh start-dev --transaction-xa-enabled=false"     eta add korse  ta sara  
+        name: KEYCLOAK_HTTP_PORT
+          value: '80'
+        - name: KEYCLOAK_HTTPS_PORT
+          value: '443'                      ei port number change korse and visual studio te giye values.yaml file a giye networkPoloicy te namespace change kore diye mariadb-cloud kore dise  ]
+          
+
+then ingress a giye external ip address ashse kina check korte hobe  then host name click webside keycloak open hobe .
+
+
+
+****Create an Ingress with Basic Authentication (nginx)**** [https://longhorn.io/docs/1.6.0/deploy/accessing-the-ui/longhorn-ingress/] ****
+
+terminal a likhte hobe 
+
+kubectl -n cwg-new apply -f ingress_mailhog.yaml (ei yaml file a basic-auth add korte hobe add korte hobe jeta whistle law er ingress_mailhog.yaml file theke copy kora hoise )
+
+USER=admin; PASSWORD=admin; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" >> auth
+
+cat auth
+
+kubectl -n cwg-new2 create secret generic basic-auth --from-file=auth
+
+kubectl -n cwg-new2 get secret basic-auth -o yaml
+
+curl -v https://ldap-dev01.in.pi-lar.net/mailhog/
+
+curl -v https://ldap-dev01.in.pi-lar.net/mailhog/  -u admin:admin
+
+[ei khane amr jei problem hoichilo sheta holocilo mailhog webpage a login option ashe na etakar karon holo ingress er pod gula basic er kommand pay nai tai oita edit kore update korate oita login option chole ashse in mailhog er web page a]
+
+
+---kivabe 
+terraform diy kaj kora jay sheta-----
+terra form shudhu becrypt use korse to encode password but jodio ei khane encode  use kora hy nai tarpore bujha jonno encode use kore hoise.
+____________________________________________________________________________________________________________________________________________________
+ei dashboard> service> ingress click korar pore kono host name and endpoint pai nai karon values2.yaml file a ingress er ingressclassname: "nginx" hoite hobe abong jehetu keycloak pods path kujhe paychchilo na tai values2.yaml file a extraEnv a te  
+
+"- name: KC_HTTP_RELATIVE_PATH
+   value: /auth " eta add korte hoise better hoy ingress er rule path a "/auth/(.*)" add korle. tarpore dashboard er network policye te giye keycloak ba ingress er police er pod delete korte hobe.
+
+[noted: always ingressclass a "nginx" dite hobe karon eta load balencer hishebe kaj kore] 
+
+tasara
+
+_____________________________________
+terraform  er 2 function ase ekta holo 
+resouce jeta use kora hoy jokhon jodi terraform k jodi kisu generate korete hoy tahole jemon token 
+data holo jeta dashboard theke nite hoy jemon registry value "git.in.pi-lar:5050"
+
+service account er jonno offical website use korte hoy
+ekta resource jodi onno resource use kore shei khettre depend command use korte hoy token dekhar jonno ("   https://stackoverflow.com/questions/71151942/how-can-i-print-out-sensitive-values-from-terraform-state ") and token er khettre terminal a "terraform output -raw password" eta use koresi
+
+etaw effective ["https://levelup.gitconnected.com/how-to-deploy-a-kubernetes-dashboard-using-terraform-b7ff28867952"]
+
+
+
+To install gitlab/runner in kube/system
+
+____________________________________
+gitlab runner
+
+just  tft file ta k  follow korte hobe values_gitlab er shathe match korr information dite hobe.tasara eta te tag erkta problem hoise jeta runner mentioin kore tar pore tag dite hobe.
+
+kono kisu run na hole pvc remove korte hobe and secret o remove korte hobe
+bitnami/mariadb te gitlab a readme te j perameter ase table er moddhe oi gula use korte hobe (primary,scondary oi gula)
+pvc jodi delete na hoy tahole edit command diye "finalizers :...." purata delete kore hobe then delete kort hobe last a delete command er ses a "--grace-period=0 --force" eta add korte hobe.
+
+
+
+
+ ___________________________________________
+ 
+ kal set kore value_gitlab.yaml file information dite hobe r secret name er jonno kubernet provider secret resource use korte hobe
+
+__________________
+
+jokhon duita file er difference ber korte hobe tokhon "diff .kube/config /etc/rancher/k3s/k3s.yaml" mane diff diye duita filer path dite hobe but .kube er age kono "/" nai
+
+jokhon ekta file theke copy kore onno file a paste korte hobe tokhon "cp /etc/rancher/k3s/k3s.yaml .kube/config"  eikhane jei file ta theke copy korbo sheta age boshbe ar jeikhane paste korbo sheta pore boshbe 
+
+_______________________________________________________________
+theory about kubernetes :
+https://medium.com/@danielepolencic/learn-why-you-cant-ping-a-kubernetes-service-dec88b55e1a3
+
+  
